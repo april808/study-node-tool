@@ -1,5 +1,7 @@
 $fontSize: 14px;
 $color : #333;
+$red:blue;
+
 
 
 body {
@@ -39,4 +41,14 @@ body {
 
     }
 
+}
+
+h1{
+    color: $red;
+}
+
+ul{
+    li:first-of-type{
+        color: $red;
+    }
 }
