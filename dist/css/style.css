@@ -27,5 +27,9 @@ body .wrapper header nav ul li {
   padding: 10px 20px;
   text-align: center;
   width: 120px;
-  background-color: #fd8a8a;
+  background-color: orangered;
+}
+
+.content {
+  background-color: #fff;
 }

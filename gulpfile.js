@@ -102,7 +102,6 @@ exports.allcss = concatcss;
 // ==== sass =====
 const sass = require('gulp-sass')(require('sass'));
 
-
 function sassstyle() {
   return src('src/sass/*.scss')
       .pipe(sass.sync().on('error', sass.logError))
@@ -140,7 +139,6 @@ function img() {
 
 //監看所有變動
 
-
 function taskWatch() {
     watch('src/sass/*.scss', sassstyle)
     watch(['src/images/*.*' , 'src/images/**/*.*'], img)
@@ -150,3 +148,44 @@ function taskWatch() {
 
 
 exports.w = series(img,taskWatch)
+
+//瀏覽器同步
+const browserSync = require('browser-sync');
+const reload = browserSync.reload;
+
+function browser(done) {
+    browserSync.init({
+        server: {
+            baseDir: "./dist",
+            index: "index.html"
+        },
+        port: 3000
+    });
+    watch('src/sass/*.scss', sassstyle).on('change' , reload)
+    watch(['src/images/*.*' , 'src/images/**/*.*'], img).on('change' , reload)
+    watch('src/js/*.js' , minijs).on('change' , reload)
+    watch(['src/*.html', 'src/layout/*.html'], html).on('change' , reload)
+    done();
+}
+
+
+exports.default = browser;
+
+//以上開發用
+
+
+//以下打包用
+
+//壓縮圖片
+const imagemin = require('gulp-imagemin');
+
+function min_images(){
+    return src('dev/images/*.*')
+    .pipe(imagemin([
+        imagemin.mozjpeg({quality: 70, progressive: true}) // 壓縮品質      quality越低 -> 壓縮越大 -> 品質越差 
+    ]))
+    .pipe(dest('dist/images'))
+}
+
+
+//JS 降轉 babel
